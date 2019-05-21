@@ -13,26 +13,37 @@ export default class ApplicationViews extends Component {
         locations: []
     }
 
-componentDidMount(){
-    const newState = {};
-    AnimalManager.getAll()
-        .then(animals => newState.animals = animals)
-        .then(() => this.setState(newState))
-}
+    componentDidMount(){
+        const newState = {};
+        AnimalManager.getAll()
+            .then(animals => newState.animals = animals)
+            .then(() => this.setState(newState))
+    }
 
-render() {
-    return (
-        <React.Fragment>
-            <Route exact path="/" render={(props) => {
-                return <LocationList locations={this.state.locations} />
-            }} />
-            <Route exact path="/animals" render={(props) => {
-                return <AnimalList animals={this.state.animals} />
-            }} />
-            <Route exact path="/employees" render={(props) => {
-                return <EmployeeList employees={this.state.employees} />
-            }} />
-        </React.Fragment>
+    deleteAnimal = (id) => {
+        const newState = {};
+        AnimalManager.deleteAnimal(id)
+        .then(AnimalManager.getAll)
+        .then(() => {
+            newState.animals = animals
+        })
+        .then(() => this.setState(NewState))
+    }
+
+
+    render() {
+        return (
+            <React.Fragment>
+                <Route exact path="/" render={(props) => {
+                    return <LocationList locations={this.state.locations} />
+                }} />
+                <Route exact path="/animals" render={(props) => {
+                    return <AnimalList animals={this.state.animals} deleteAnimal={this.deleteAnimal} />
+                }} />
+                <Route exact path="/employees" render={(props) => {
+                    return <EmployeeList employees={this.state.employees} />
+                }} />
+            </React.Fragment>
     )
 }
 }
